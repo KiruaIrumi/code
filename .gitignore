@@ -1,12 +1,106 @@
-*.class
+package fr.sky.wars.events;
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
-# Package Files #
-*.jar
-*.war
-*.ear
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
+import fr.sky.wars.ChatUtils;
+import fr.sky.wars.SkyWars;
+
+public class Playerjoin implements Listener {
+	
+	static int task;
+    static int countdown = 31;
+	
+	@EventHandler
+	public void onplayerjoin(PlayerJoinEvent e){
+		Player p = e.getPlayer();
+		int playercount = Bukkit.getServer().getOnlinePlayers().size();
+		p.setGameMode(GameMode.ADVENTURE);
+		p.getInventory().clear();
+		Location lobby2 = new Location(Bukkit.getWorlds().get(0), 121, 206, 119);
+		Location lobby1 = new Location(Bukkit.getWorlds().get(0), 97, 206, 131);
+		Location lobby3 = new Location(Bukkit.getWorlds().get(0), 130, 206, 98);
+		Location lobby4 = new Location(Bukkit.getWorlds().get(0), 120, 206, 75);
+		Location lobby5 = new Location(Bukkit.getWorlds().get(0), 97, 206, 65);
+		Location lobby6 = new Location(Bukkit.getWorlds().get(0), 74, 206, 75);
+		Location lobby7 = new Location(Bukkit.getWorlds().get(0), 64, 206, 98);
+		Location lobby8 = new Location(Bukkit.getWorlds().get(0), 74, 206, 121);
+		p.teleport(lobby8);
+		p.teleport(lobby2);
+		p.teleport(lobby5);
+		p.teleport(lobby6);
+		p.teleport(lobby7);
+		p.teleport(lobby1);
+		p.teleport(lobby3);
+		p.teleport(lobby4);
+	}
+		
+		@EventHandler
+		public void OnPlayerTeleport(PlayerTeleportEvent p){
+		if((boolean) SkyWars.stop());
+			Location to;
+			Location from;
+			if(from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ()) {
+				Location From;
+				Player.teleport(new Location(From.getWorld(), from.getBlockX() + 0.5, from.getBlockY(), from.getBlockZ() + 0.5, to.getYaw(), to.getPitch()), TeleportCause.PLUGIN);
+				
+			} 
+		
+		
+			
+		e.setJoinMessage(ChatUtils.getGamePrefix()+p.getName()+" a rejoint la partie "+ChatColor.GRAY+"["+playercount+" /16 ]");
+		
+		if(playercount == 10){
+		    task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("sky"), new Runnable(){
+
+				@Override
+				public void run() {
+					countdown--;
+					if((countdown <= 2 && countdown   !=0) || countdown == 30){
+						Bukkit.broadcastMessage(ChatUtils.getGamePrefix()+"la partie commence dans"+countdown+" secondes");
+						
+					}
+					
+					if(countdown == 0){
+						Bukkit.getScheduler().cancelTask(task);
+						p.sendMessage(ChatUtils.getGamePrefix()+"C'est parti bonne chance");
+						SkyWars.start();
+					}
+				
+		
+				} 
+		    		
+		    		
+		}, 20, 20);
+	
+	} 
+			
+		if(playercount == 16){
+			countdown = 10;
+		}
+
+
+
+		if(playercount < 10){
+			int joueursManquant = 10 - playercount;
+			for(Player pls : Bukkit.getOnlinePlayers()){
+			pls.sendMessage(ChatUtils.getGamePrefix()+"Il manque encore "+joueursManquant+" joueurs pour lancer la partie ! ");
+			
+			
+		}
+		}
+	}
+			
+}
+
+
